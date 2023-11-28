@@ -43,10 +43,6 @@ class ArtifactControllerTest {
 
     @BeforeEach
     void setUp() {
-    }
-
-    @AfterEach
-    void tearDown() {
         this.artifacts = new ArrayList<>();
         Artifact a1 = new Artifact();
         a1.setId(1);
@@ -87,6 +83,11 @@ class ArtifactControllerTest {
         a6.setDescription("The Resurrection Stone allows the holder to bring back deceased loved ones, in a semi-physical form, and communicate with them.");
 
         this.artifacts.add(a6);
+    }
+
+    @AfterEach
+    void tearDown() {
+
     }
 
     @Test

@@ -1,7 +1,6 @@
 package dev.gtmedia.hogwartsartifactonline.artifact;
 
-import dev.gtmedia.hogwartsartifactonline.artifact.dto.ArtifactDTO;
-import dev.gtmedia.hogwartsartifactonline.exception.ArtifactNotFoundException;
+import dev.gtmedia.hogwartsartifactonline.exception.ObjectNotFoundException;
 import dev.gtmedia.hogwartsartifactonline.wizard.Wizard;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -18,7 +17,6 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -106,7 +104,7 @@ class ArtifactServiceTest {
             artifactService.findById(1);
         });
         //Then
-        assertThat(throwable).isInstanceOf(ArtifactNotFoundException.class).hasMessage("Artifact with id 1 not found");
+        assertThat(throwable).isInstanceOf(ObjectNotFoundException.class).hasMessage("Artifact with id 1 not found");
         verify(artifactRepository, times(1)).findById(1);
     }
 
