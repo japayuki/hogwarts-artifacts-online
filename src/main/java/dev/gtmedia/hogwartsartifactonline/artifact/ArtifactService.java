@@ -58,6 +58,7 @@ public class ArtifactService {
     }
 
     public boolean deleteById(Integer artifactId) {
+        findById(artifactId); //Will throw if artifact not found
         artifactRepository.deleteById(artifactId);
         return true;
     }
