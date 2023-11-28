@@ -2,6 +2,7 @@ package dev.gtmedia.hogwartsartifactonline.exception;
 
 import dev.gtmedia.hogwartsartifactonline.system.ResultResponse;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -25,6 +26,12 @@ public class ExceptionHandlerAdvice {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     ResultResponse handleObjectNotFoundException(ObjectNotFoundException ex){
         return new ResultResponse(false, 404, ex.getMessage());
+    }
+
+    @ExceptionHandler(value = UsernameNotFoundException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    ResultResponse handleUsernameNotFoundException(UsernameNotFoundException ex){
+        return new ResultResponse(false, 401, ex.getMessage());
     }
 
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
