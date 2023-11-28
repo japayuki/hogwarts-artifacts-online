@@ -15,9 +15,15 @@ import java.util.List;
 @RestControllerAdvice
 public class ExceptionHandlerAdvice {
 
-    @ExceptionHandler(value = ArtifactNotFoundException.class)
+//    @ExceptionHandler(value = ArtifactNotFoundException.class)
+//    @ResponseStatus(HttpStatus.NOT_FOUND)
+//    ResultResponse handleArtifactNotFoundException(ArtifactNotFoundException ex){
+//        return new ResultResponse(false, 404, ex.getMessage());
+//    }
+
+    @ExceptionHandler(value = ObjectNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    ResultResponse handleArtifactNotFoundException(ArtifactNotFoundException ex){
+    ResultResponse handleObjectNotFoundException(ObjectNotFoundException ex){
         return new ResultResponse(false, 404, ex.getMessage());
     }
 

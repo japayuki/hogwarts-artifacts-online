@@ -11,3 +11,6 @@ spring:
 server:
   servlet:
     context-path: /api/v1
+#api:
+#  endpoint:
+#    base-url: /api/v1

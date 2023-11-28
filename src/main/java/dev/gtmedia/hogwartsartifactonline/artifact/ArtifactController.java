@@ -45,6 +45,12 @@ public class ArtifactController {
         return new ResultResponse(true, 200, "Update Artifact Success", artifactToArtifactDtoConverter.convert(updatedArtifact));
     }
 
+    @PutMapping("/{artifactId}")
+    public ResultResponse unassignArtifact(@PathVariable Integer artifactId){
+        ArtifactDTO artifactDTO = artifactService.unassignArtifact(artifactId);
+        return new ResultResponse(true, 200, "Artifact Unassignment Success", artifactDTO);
+    }
+
     @DeleteMapping("/{artifactId}")
     public ResultResponse deleteArtifactById(@PathVariable Integer artifactId){
         boolean status = artifactService.deleteById(artifactId);

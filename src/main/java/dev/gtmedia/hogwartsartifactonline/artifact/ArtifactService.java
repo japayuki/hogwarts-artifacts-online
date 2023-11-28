@@ -2,8 +2,7 @@ package dev.gtmedia.hogwartsartifactonline.artifact;
 
 import dev.gtmedia.hogwartsartifactonline.artifact.converter.ArtifactToArtifactDtoConverter;
 import dev.gtmedia.hogwartsartifactonline.artifact.dto.ArtifactDTO;
-import dev.gtmedia.hogwartsartifactonline.exception.ArtifactNotFoundException;
-import dev.gtmedia.hogwartsartifactonline.exception.WizardNotFoundException;
+import dev.gtmedia.hogwartsartifactonline.exception.ObjectNotFoundException;
 import dev.gtmedia.hogwartsartifactonline.utils.IdWorker;
 import dev.gtmedia.hogwartsartifactonline.wizard.Wizard;
 import dev.gtmedia.hogwartsartifactonline.wizard.WizardRepository;
@@ -11,7 +10,6 @@ import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 
 @Service
@@ -31,7 +29,7 @@ public class ArtifactService {
     }
 
     public Artifact findById(Integer artifactId){
-        return artifactRepository.findById(artifactId).orElseThrow(() -> new ArtifactNotFoundException(artifactId));
+        return artifactRepository.findById(artifactId).orElseThrow(() -> new ObjectNotFoundException(artifactId, "Artifact"));
     }
 
     public Artifact update(ArtifactDTO artifactDTO){
@@ -40,11 +38,11 @@ public class ArtifactService {
             artifact.setDescription(artifactDTO.description());
             if (artifactDTO.owner() != null){
                 Integer ownerId = artifactDTO.owner().id();
-                Wizard wizard = wizardRepository.findById(ownerId).orElseThrow(() -> new WizardNotFoundException(ownerId));
+                Wizard wizard = wizardRepository.findById(ownerId).orElseThrow(() -> new ObjectNotFoundException(ownerId, "Wizard"));
                 wizard.addArtifact(artifact);
             }
             return artifactRepository.save(artifact);
-        }).orElseThrow(() -> new ArtifactNotFoundException(artifactDTO.id()));
+        }).orElseThrow(() -> new ObjectNotFoundException(artifactDTO.id(),"Artifact"));
     }
 
     public List<Artifact> findAll() {
@@ -61,5 +59,12 @@ public class ArtifactService {
         findById(artifactId); //Will throw if artifact not found
         artifactRepository.deleteById(artifactId);
         return true;
+    }
+
+    public ArtifactDTO unassignArtifact(Integer artifactId) {
+        Artifact artifact = findById(artifactId);
+        artifact.setOwner(null);
+        Artifact savedArtifact = artifactRepository.save(artifact);
+        return artifactToArtifactDtoConverter.convert(savedArtifact);
     }
 }
