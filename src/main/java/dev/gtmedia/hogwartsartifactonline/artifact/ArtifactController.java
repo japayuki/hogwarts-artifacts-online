@@ -4,6 +4,9 @@ import dev.gtmedia.hogwartsartifactonline.artifact.converter.ArtifactToArtifactD
 import dev.gtmedia.hogwartsartifactonline.artifact.dto.ArtifactDTO;
 import dev.gtmedia.hogwartsartifactonline.system.ResultResponse;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -30,6 +33,18 @@ public class ArtifactController {
     public ResultResponse findArtifactById(@PathVariable Integer artifactId){
         Artifact foundArtifact = artifactService.findById(artifactId);
         return new ResultResponse(true, 200, "Find One Success", artifactToArtifactDtoConverter.convert(foundArtifact));
+    }
+
+    @GetMapping("/query")
+    public ResultResponse query(
+            @RequestParam(defaultValue = "3") Integer size,
+            @RequestParam(defaultValue = "0") Integer page,
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) String description
+    ){
+        Pageable pageable = PageRequest.of(page,size);
+        Page<ArtifactDTO> artifacts = artifactService.findArtifactsByQuery(name, description, pageable);
+        return new ResultResponse(true, 200, "Query Success", artifacts);
     }
 
     @PostMapping
