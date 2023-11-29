@@ -7,6 +7,9 @@ import dev.gtmedia.hogwartsartifactonline.utils.IdWorker;
 import dev.gtmedia.hogwartsartifactonline.wizard.Wizard;
 import dev.gtmedia.hogwartsartifactonline.wizard.WizardRepository;
 import jakarta.transaction.Transactional;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -66,5 +69,20 @@ public class ArtifactService {
         artifact.setOwner(null);
         Artifact savedArtifact = artifactRepository.save(artifact);
         return artifactToArtifactDtoConverter.convert(savedArtifact);
+    }
+
+    public Page<ArtifactDTO> findArtifactsByQuery(String name, String description, Pageable pageable) {
+        Specification<Artifact> spec = Specification.where(null);
+        if (name != null){
+            spec = spec.and(ArtifactSpecifications.hasName(name));
+        }
+        if (description != null){
+            spec = spec.and(ArtifactSpecifications.hasDescription(description));
+        }
+        Page<Artifact> all = artifactRepository.findAll(
+                spec,
+                pageable
+        );
+        return all.map(artifactToArtifactDtoConverter::convert);
     }
 }
